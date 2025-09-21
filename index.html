@@ -13,8 +13,6 @@
     <meta name="apple-mobile-web-app-title" content="LinkHub">
     
     <!-- Manifest -->
-     <link rel="manifest" href="manifest.json">
-
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkxpbmtIdWIiLAogICJzaG9ydF9uYW1lIjogIkxpbmtIdWIiLAogICJkZXNjcmlwdGlvbiI6ICJBcGxpa2FzaSB1bnR1ayBtZW5nZWxvbGEgZGFuIG1lbnlpbXBhbiBsaW5rIGZhdm9yaXQgQW5kYSIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwKICAidGhlbWVfY29sb3IiOiAiIzNiODJmNiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB3aWR0aD0nMTkyJyBoZWlnaHQ9JzE5Micgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSclMjMzYjgyZjYnJTNFJTNDcGF0aCBkPSdNMTAgNHYzaDRWNGEyIDIgMCAwIDAtMiAySDhBMiAyIDAgMCAwIDYgOHY4YTIgMiAwIDAgMCAyIDJoOGEyIDIgMCAwIDAgMi0yVjhhMiAyIDAgMCAwLTItMmgtNHptMCAzaDR2OUg2VjhoNHYyWm0tMiA1aDJ2LTJIOHYyWm0wIDJoMnYtMkg4djJabTQgMGgydi0yaC0ydjJabTAtMmgydi0yaC0ydjJaJy8lM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
     
     <!-- Icons -->
@@ -343,6 +341,16 @@
             setupEventListeners();
             setupPWA();
             setupFilterTags();
+            setupOfflineDetection();
+            preloadResources();
+            
+            // Show offline capabilities info
+            setTimeout(() => {
+                if (!localStorage.getItem('offlineInfoShown')) {
+                    showNotification('LinkHub sekarang bisa digunakan offline! 🚀', 'success');
+                    localStorage.setItem('offlineInfoShown', 'true');
+                }
+            }, 2000);
         }
 
         // Theme Management
@@ -417,8 +425,86 @@
                 elements.linkList.appendChild(linkCard);
             });
             
-            localStorage.setItem("links", JSON.stringify(links));
+            // Check for updates
+            checkForUpdates();
         }
+
+        function showUpdateNotification(newWorker) {
+            const updateNotification = document.createElement('div');
+            updateNotification.className = 'fixed bottom-6 left-6 right-6 bg-blue-600 text-white p-4 rounded-xl shadow-lg z-50 max-w-sm mx-auto';
+            updateNotification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-semibold">Update Tersedia</p>
+                        <p class="text-sm opacity-90">Versi baru LinkHub sudah siap</p>
+                    </div>
+                    <button id="updateBtn" class="bg-white text-blue-600 px-3 py-1 rounded font-medium ml-3">
+                        Update
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(updateNotification);
+            
+            document.getElementById('updateBtn').addEventListener('click', () => {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+            });
+        }
+
+        function checkForUpdates() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.update();
+                });
+            }
+        }
+
+        // Offline status detection
+        function setupOfflineDetection() {
+            const offlineIndicator = document.createElement('div');
+            offlineIndicator.id = 'offlineIndicator';
+            offlineIndicator.className = 'fixed top-16 left-4 right-4 bg-orange-500 text-white p-3 rounded-lg z-50 text-center hidden';
+            offlineIndicator.innerHTML = `
+                <div class="flex items-center justify-center space-x-2">
+                    <i class="fas fa-wifi-slash"></i>
+                    <span>Mode Offline - Data tersimpan lokal</span>
+                </div>
+            `;
+            document.body.appendChild(offlineIndicator);
+
+            function updateOnlineStatus() {
+                if (navigator.onLine) {
+                    offlineIndicator.classList.add('hidden');
+                } else {
+                    offlineIndicator.classList.remove('hidden');
+                }
+            }
+
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            
+            // Initial check
+            updateOnlineStatus();
+        }
+
+        // Preload critical resources
+        function preloadResources() {
+            const resources = [
+                'https://cdn.tailwindcss.com',
+                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+            ];
+
+            resources.forEach(url => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = url;
+                document.head.appendChild(link);
+            });
+        }
+            
+            localStorage.setItem("links", JSON.stringify(links));
+        
 
         function createLinkCard(link, index) {
             const card = document.createElement('div');
@@ -747,13 +833,143 @@
 
         // PWA Setup
         function setupPWA() {
-            // Register service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(() => console.log('Service Worker registered ✅'))
-                .catch(err => console.log('SW registration failed 😢', err));
-        }
+            // Create and register comprehensive service worker
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                const CACHE_NAME = 'linkhub-v2';
+                const CACHE_URLS = [
+                    '/',
+                    'https://cdn.tailwindcss.com',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2'
+                ];
 
+                // Install event - cache all resources
+                self.addEventListener('install', event => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                            .then(cache => {
+                                console.log('Caching app shell');
+                                return cache.addAll(CACHE_URLS.map(url => new Request(url, {
+                                    mode: 'cors',
+                                    credentials: 'omit'
+                                })));
+                            })
+                            .catch(error => {
+                                console.log('Cache failed for some resources:', error);
+                                // Cache at least the main page
+                                return caches.open(CACHE_NAME).then(cache => cache.add('/'));
+                            })
+                    );
+                    self.skipWaiting();
+                });
+
+                // Activate event - clean up old caches
+                self.addEventListener('activate', event => {
+                    event.waitUntil(
+                        caches.keys().then(cacheNames => {
+                            return Promise.all(
+                                cacheNames.map(cacheName => {
+                                    if (cacheName !== CACHE_NAME) {
+                                        console.log('Deleting old cache:', cacheName);
+                                        return caches.delete(cacheName);
+                                    }
+                                })
+                            );
+                        })
+                    );
+                    self.clients.claim();
+                });
+
+                // Fetch event - serve from cache, fallback to network
+                self.addEventListener('fetch', event => {
+                    // Skip non-GET requests
+                    if (event.request.method !== 'GET') {
+                        return;
+                    }
+
+                    // Skip cross-origin requests that aren't in our cache list
+                    if (!event.request.url.startsWith(self.location.origin) && 
+                        !CACHE_URLS.some(url => event.request.url.includes(url.replace('https://', '')))) {
+                        return;
+                    }
+
+                    event.respondWith(
+                        caches.match(event.request)
+                            .then(response => {
+                                // Return cached response if found
+                                if (response) {
+                                    return response;
+                                }
+
+                                // Clone the request
+                                const fetchRequest = event.request.clone();
+
+                                return fetch(fetchRequest).then(response => {
+                                    // Check if valid response
+                                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                                        return response;
+                                    }
+
+                                    // Clone the response
+                                    const responseToCache = response.clone();
+
+                                    // Add to cache
+                                    caches.open(CACHE_NAME)
+                                        .then(cache => {
+                                            cache.put(event.request, responseToCache);
+                                        });
+
+                                    return response;
+                                }).catch(() => {
+                                    // Return offline page or default response
+                                    if (event.request.destination === 'document') {
+                                        return caches.match('/');
+                                    }
+                                });
+                            })
+                    );
+                });
+
+                // Background sync for offline actions
+                self.addEventListener('sync', event => {
+                    if (event.tag === 'background-sync') {
+                        console.log('Background sync triggered');
+                    }
+                });
+
+                // Handle messages from main thread
+                self.addEventListener('message', event => {
+                    if (event.data && event.data.type === 'SKIP_WAITING') {
+                        self.skipWaiting();
+                    }
+                });
+                `;
+
+                // Convert to blob URL and register
+                const swBlob = new Blob([swCode], { type: 'text/javascript' });
+                const swUrl = URL.createObjectURL(swBlob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(registration => {
+                        console.log('SW registered successfully');
+                        
+                        // Handle updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showUpdateNotification(newWorker);
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => console.log('SW registration failed:', error));
+            }
+
+            
             // Handle install prompt
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
