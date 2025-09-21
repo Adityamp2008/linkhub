@@ -12,12 +12,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="LinkHub">
     
-    <!-- Icons -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E">
-    
     <!-- Manifest -->
-    <link rel="manifest" id="manifest-placeholder">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkxpbmtIdWIiLAogICJzaG9ydF9uYW1lIjogIkxpbmtIdWIiLAogICJkZXNjcmlwdGlvbiI6ICJBcGxpa2FzaSB1bnR1ayBtZW5nZWxvbGEgZGFuIG1lbnlpbXBhbiBsaW5rIGZhdm9yaXQgQW5kYSIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwKICAidGhlbWVfY29sb3IiOiAiIzNiODJmNiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB3aWR0aD0nMTkyJyBoZWlnaHQ9JzE5Micgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSclMjMzYjgyZjYnJTNFJTNDcGF0aCBkPSdNMTAgNHYzaDRWNGEyIDIgMCAwIDAtMiAySDhBMiAyIDAgMCAwIDYgOHY4YTIgMiAwIDAgMCAyIDJoOGEyIDIgMCAwIDAgMi0yVjhhMiAyIDAgMCAwLTItMmgtNHptMCAzaDR2OUg2VjhoNHYyWm0tMiA1aDJ2LTJIOHYyWm0wIDJoMnYtMkg4djJabTQgMGgydi0yaC0ydjJabTAtMmgydi0yaC0ydjJaJy8lM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 24 24' fill='%233b82f6'><path d='M10 4v3h4V4a2 2 0 0 0-2 2H8A2 2 0 0 0 6 8v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4zm0 3h4v9H6V8h4v2Zm-2 5h2v-2H8v2Zm0 2h2v-2H8v2Zm4 0h2v-2h-2v2Zm0-2h2v-2h-2v2Z'/></svg>">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -30,102 +29,49 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        .link-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
         
         .link-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .dark .link-card:hover {
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .filter-tag {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            background-color: #f3f4f6;
-            border-radius: 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-        
-        .dark .filter-tag {
-            background-color: #374151;
-            color: #d1d5db;
-        }
-        
-        .filter-tag:hover {
-            background-color: #e5e7eb;
-        }
-        
-        .dark .filter-tag:hover {
-            background-color: #4b5563;
-        }
-        
-        .filter-tag.active {
-            background-color: #3b82f6;
-            color: white;
-            border-color: #2563eb;
         }
         
         .floating-btn {
             box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
         }
         
         .floating-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
         }
-
-        .standalone-mode {
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        
-        .standalone-mode header {
-            padding-top: calc(env(safe-area-inset-top) + 1rem);
-        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen smooth-transition">
     
-    <!-- PWA Install Banner -->
-    <div id="installBanner" class="fixed top-16 left-4 right-4 bg-blue-600 text-white p-4 rounded-xl shadow-lg z-50 hidden">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-mobile-alt text-white"></i>
-                </div>
-                <div>
-                    <p class="font-semibold">Install LinkHub</p>
-                    <p class="text-sm opacity-90">Install sebagai aplikasi untuk pengalaman terbaik</p>
-                </div>
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt" class="fixed top-0 left-0 right-0 bg-blue-600 text-white p-3 z-50 hidden">
+        <div class="flex items-center justify-between max-w-md mx-auto">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-download"></i>
+                <span class="text-sm">Install LinkHub sebagai aplikasi</span>
             </div>
-            <div class="flex space-x-2">
-                <button id="installAppBtn" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium text-sm">
-                    Install
-                </button>
-                <button id="dismissInstallBtn" class="text-white/80 p-2">
+            <div class="space-x-2">
+                <button id="installBtn" class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium">Install</button>
+                <button id="dismissInstall" class="text-white opacity-75">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
     </div>
-    <div id="offlineIndicator" class="fixed top-0 left-0 right-0 bg-orange-500 text-white p-2 text-center z-50 hidden">
-        <i class="fas fa-wifi-slash mr-2"></i>
-        Mode Offline - Data tersimpan lokal
-    </div>
 
     <!-- Header -->
-    <header class="sticky top-0 bg-white/90 dark:bg-gray-900/90 glass-effect border-b border-gray-200 dark:border-gray-700 z-40">
+    <header class="sticky top-0 bg-white/80 dark:bg-gray-900/80 glass-effect border-b border-gray-200 dark:border-gray-700 z-40">
         <div class="max-w-4xl mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
@@ -162,8 +108,10 @@
             </div>
             
             <!-- Filter Tags -->
-            <div id="filterTags" class="mt-3 flex flex-wrap gap-2">
-                <!-- Will be populated by JavaScript -->
+            <div id="filterTags" class="mt-3 flex flex-wrap gap-2 hidden">
+                <button class="filter-tag active" data-category="all">
+                    <i class="fas fa-globe mr-1"></i> Semua
+                </button>
             </div>
         </div>
     </header>
@@ -262,10 +210,10 @@
                 </div>
                 
                 <div class="flex space-x-2">
-                    <button onclick="saveWANumber()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium smooth-transition">
+                    <button id="saveWABtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium smooth-transition">
                         <i class="fas fa-save mr-2"></i>Simpan
                     </button>
-                    <button onclick="skipWASetup()" class="px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg smooth-transition">
+                    <button id="skipWABtn" class="px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg smooth-transition">
                         Skip
                     </button>
                 </div>
@@ -278,7 +226,7 @@
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-md">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-bold">Tambah Link Baru</h2>
-                <button onclick="closeAddModal()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                <button id="closeAddModal" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -317,10 +265,10 @@
                 </div>
                 
                 <div class="flex space-x-2">
-                    <button onclick="addLink()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium smooth-transition">
+                    <button id="saveLinkBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium smooth-transition">
                         <i class="fas fa-save mr-2"></i>Simpan Link
                     </button>
-                    <button onclick="closeAddModal()" class="px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg smooth-transition">
+                    <button id="cancelAddBtn" class="px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg smooth-transition">
                         Batal
                     </button>
                 </div>
@@ -333,7 +281,7 @@
         <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-sm">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-bold">Pengaturan WhatsApp</h2>
-                <button onclick="closeWASettings()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                <button id="closeWASettings" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -345,87 +293,69 @@
                            class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500">
                 </div>
                 
-                <button onclick="updateWANumber()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium smooth-transition">
-                    <i class="fab fa-whatsapp mr-2"></i>Update Nomor
-                </button>
+                <div class="flex space-x-2">
+                    <button id="updateWABtn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium smooth-transition">
+                        <i class="fab fa-whatsapp mr-2"></i>Update
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notifications -->
-    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
-
     <script>
-        // App State - menggunakan variabel yang jelas
-        let appData = {
-            links: [],
-            waNumber: null,
-            currentTheme: 'light',
-            sharedCount: 0,
-            currentFilter: 'all'
+        // App State
+        let links = JSON.parse(localStorage.getItem("links")) || [];
+        let waNumber = localStorage.getItem("waNumber");
+        let currentTheme = localStorage.getItem("theme") || "light";
+        let sharedCount = parseInt(localStorage.getItem("sharedCount")) || 0;
+        let deferredPrompt;
+
+        // DOM Elements
+        const elements = {
+            waPopup: document.getElementById("waPopup"),
+            waInput: document.getElementById("waInput"),
+            saveWABtn: document.getElementById("saveWABtn"),
+            skipWABtn: document.getElementById("skipWABtn"),
+            linkList: document.getElementById("linkList"),
+            addLinkBtn: document.getElementById("addLinkBtn"),
+            addLinkModal: document.getElementById("addLinkModal"),
+            searchInput: document.getElementById("searchInput"),
+            themeToggle: document.getElementById("themeToggle"),
+            emptyState: document.getElementById("emptyState"),
+            totalLinks: document.getElementById("totalLinks"),
+            totalCategories: document.getElementById("totalCategories"),
+            sharedCountEl: document.getElementById("sharedCount"),
+            lastAdded: document.getElementById("lastAdded"),
+            waSettingsBtn: document.getElementById("waSettingsBtn"),
+            waSettingsModal: document.getElementById("waSettingsModal"),
+            currentWANumber: document.getElementById("currentWANumber"),
+            filterTags: document.getElementById("filterTags")
         };
 
-        // Load data dari localStorage
-        function loadAppData() {
-            try {
-                const savedLinks = localStorage.getItem('linkhub_links');
-                appData.links = savedLinks ? JSON.parse(savedLinks) : [];
-                
-                appData.waNumber = localStorage.getItem('linkhub_wa_number');
-                appData.currentTheme = localStorage.getItem('linkhub_theme') || 'light';
-                appData.sharedCount = parseInt(localStorage.getItem('linkhub_shared_count')) || 0;
-            } catch (error) {
-                console.error('Error loading app data:', error);
-                appData.links = [];
-            }
-        }
-
-        // Save data ke localStorage
-        function saveAppData() {
-            try {
-                localStorage.setItem('linkhub_links', JSON.stringify(appData.links));
-                localStorage.setItem('linkhub_wa_number', appData.waNumber || '');
-                localStorage.setItem('linkhub_theme', appData.currentTheme);
-                localStorage.setItem('linkhub_shared_count', appData.sharedCount.toString());
-            } catch (error) {
-                console.error('Error saving app data:', error);
-                showToast('Gagal menyimpan data', 'error');
-            }
-        }
-
-        // Toast notification system
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `p-4 rounded-lg shadow-lg max-w-sm transform translate-x-full transition-transform duration-300 ${
-                type === 'success' ? 'bg-green-500 text-white' : 
-                type === 'error' ? 'bg-red-500 text-white' : 
-                'bg-blue-500 text-white'
-            }`;
+        // Initialize App
+        function initApp() {
+            applyTheme();
+            checkWANumber();
+            renderLinks();
+            updateStats();
+            setupEventListeners();
+            setupPWA();
+            setupFilterTags();
+            setupOfflineDetection();
+            preloadResources();
             
-            toast.innerHTML = `
-                <div class="flex items-center space-x-2">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            document.getElementById('toastContainer').appendChild(toast);
-            
-            // Animate in
+            // Show offline capabilities info
             setTimeout(() => {
-                toast.classList.remove('translate-x-full');
-            }, 100);
-            
-            // Animate out and remove
-            setTimeout(() => {
-                toast.classList.add('translate-x-full');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+                if (!localStorage.getItem('offlineInfoShown')) {
+                    showNotification('LinkHub sekarang bisa digunakan offline! 🚀', 'success');
+                    localStorage.setItem('offlineInfoShown', 'true');
+                }
+            }, 2000);
         }
 
-        // Theme management
+        // Theme Management
         function applyTheme() {
-            if (appData.currentTheme === 'dark') {
+            if (currentTheme === 'dark') {
                 document.documentElement.classList.add('dark');
             } else {
                 document.documentElement.classList.remove('dark');
@@ -433,97 +363,150 @@
         }
 
         function toggleTheme() {
-            appData.currentTheme = appData.currentTheme === 'light' ? 'dark' : 'light';
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('theme', currentTheme);
             applyTheme();
-            saveAppData();
         }
 
-        // WhatsApp management
+        // WhatsApp Management
         function checkWANumber() {
-            if (!appData.waNumber) {
-                document.getElementById('waPopup').classList.remove('hidden');
+            if (!waNumber) {
+                elements.waPopup.classList.remove("hidden");
             }
-            if (appData.waNumber) {
-                document.getElementById('currentWANumber').value = appData.waNumber;
+            if (waNumber) {
+                elements.currentWANumber.value = waNumber;
             }
         }
 
         function saveWANumber() {
-            const input = document.getElementById('waInput').value.trim();
+            const input = elements.waInput.value.trim();
             if (input) {
-                appData.waNumber = input;
-                saveAppData();
-                document.getElementById('waPopup').classList.add('hidden');
-                document.getElementById('currentWANumber').value = input;
-                showToast('Nomor WhatsApp berhasil disimpan!', 'success');
+                localStorage.setItem("waNumber", input);
+                waNumber = input;
+                elements.waPopup.classList.add("hidden");
+                elements.currentWANumber.value = input;
+                showNotification("Nomor WhatsApp berhasil disimpan!", "success");
             } else {
-                showToast('Masukkan nomor yang valid!', 'error');
+                showNotification("Masukkan nomor yang valid!", "error");
             }
         }
 
         function skipWASetup() {
-            document.getElementById('waPopup').classList.add('hidden');
+            elements.waPopup.classList.add("hidden");
         }
 
         function updateWANumber() {
-            const input = document.getElementById('currentWANumber').value.trim();
+            const input = elements.currentWANumber.value.trim();
             if (input) {
-                appData.waNumber = input;
-                saveAppData();
-                document.getElementById('waSettingsModal').classList.add('hidden');
-                showToast('Nomor WhatsApp berhasil diupdate!', 'success');
+                localStorage.setItem("waNumber", input);
+                waNumber = input;
+                elements.waSettingsModal.classList.add("hidden");
+                showNotification("Nomor WhatsApp berhasil diupdate!", "success");
             } else {
-                showToast('Masukkan nomor yang valid!', 'error');
+                showNotification("Masukkan nomor yang valid!", "error");
             }
         }
 
-        function showWASettings() {
-            document.getElementById('waSettingsModal').classList.remove('hidden');
-        }
-
-        function closeWASettings() {
-            document.getElementById('waSettingsModal').classList.add('hidden');
-        }
-
-        // Link management
-        function renderLinks() {
-            const linkList = document.getElementById('linkList');
-            const emptyState = document.getElementById('emptyState');
+        // Link Management
+        function renderLinks(filteredLinks = null) {
+            const linksToRender = filteredLinks || links;
+            elements.linkList.innerHTML = "";
             
-            // Filter links berdasarkan current filter
-            let filteredLinks = appData.links;
-            if (appData.currentFilter !== 'all') {
-                filteredLinks = appData.links.filter(link => link.category === appData.currentFilter);
-            }
-            
-            // Filter berdasarkan search
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (searchTerm) {
-                filteredLinks = filteredLinks.filter(link => 
-                    link.title.toLowerCase().includes(searchTerm) ||
-                    link.url.toLowerCase().includes(searchTerm) ||
-                    (link.description && link.description.toLowerCase().includes(searchTerm))
-                );
-            }
-            
-            if (filteredLinks.length === 0) {
-                emptyState.classList.remove('hidden');
-                linkList.innerHTML = '';
+            if (linksToRender.length === 0) {
+                elements.emptyState.classList.remove("hidden");
                 return;
             }
             
-            emptyState.classList.add('hidden');
-            linkList.innerHTML = '';
+            elements.emptyState.classList.add("hidden");
             
-            filteredLinks.forEach((link, displayIndex) => {
-                // Cari index asli dari link dalam array utama
-                const realIndex = appData.links.findIndex(l => l.id === link.id);
-                const linkCard = createLinkCard(link, realIndex);
-                linkList.appendChild(linkCard);
+            linksToRender.forEach((link, index) => {
+                const actualIndex = links.findIndex(l => l.id === link.id);
+                const linkCard = createLinkCard(link, actualIndex);
+                elements.linkList.appendChild(linkCard);
+            });
+            
+            // Check for updates
+            checkForUpdates();
+        }
+
+        function showUpdateNotification(newWorker) {
+            const updateNotification = document.createElement('div');
+            updateNotification.className = 'fixed bottom-6 left-6 right-6 bg-blue-600 text-white p-4 rounded-xl shadow-lg z-50 max-w-sm mx-auto';
+            updateNotification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-semibold">Update Tersedia</p>
+                        <p class="text-sm opacity-90">Versi baru LinkHub sudah siap</p>
+                    </div>
+                    <button id="updateBtn" class="bg-white text-blue-600 px-3 py-1 rounded font-medium ml-3">
+                        Update
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(updateNotification);
+            
+            document.getElementById('updateBtn').addEventListener('click', () => {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
             });
         }
 
-        function createLinkCard(link, realIndex) {
+        function checkForUpdates() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.update();
+                });
+            }
+        }
+
+        // Offline status detection
+        function setupOfflineDetection() {
+            const offlineIndicator = document.createElement('div');
+            offlineIndicator.id = 'offlineIndicator';
+            offlineIndicator.className = 'fixed top-16 left-4 right-4 bg-orange-500 text-white p-3 rounded-lg z-50 text-center hidden';
+            offlineIndicator.innerHTML = `
+                <div class="flex items-center justify-center space-x-2">
+                    <i class="fas fa-wifi-slash"></i>
+                    <span>Mode Offline - Data tersimpan lokal</span>
+                </div>
+            `;
+            document.body.appendChild(offlineIndicator);
+
+            function updateOnlineStatus() {
+                if (navigator.onLine) {
+                    offlineIndicator.classList.add('hidden');
+                } else {
+                    offlineIndicator.classList.remove('hidden');
+                }
+            }
+
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            
+            // Initial check
+            updateOnlineStatus();
+        }
+
+        // Preload critical resources
+        function preloadResources() {
+            const resources = [
+                'https://cdn.tailwindcss.com',
+                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+            ];
+
+            resources.forEach(url => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = url;
+                document.head.appendChild(link);
+            });
+        }
+            
+            localStorage.setItem("links", JSON.stringify(links));
+        
+
+        function createLinkCard(link, index) {
             const card = document.createElement('div');
             card.className = 'link-card bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 smooth-transition';
             
@@ -539,25 +522,14 @@
             };
             
             const categoryColors = {
-                general: 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400',
-                work: 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400',
-                social: 'bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-400',
-                news: 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400',
-                entertainment: 'bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-400',
-                education: 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-400',
-                shopping: 'bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-400',
+                general: 'bg-blue-100 text-blue-600 dark:bg-blue-900',
+                work: 'bg-green-100 text-green-600 dark:bg-green-900',
+                social: 'bg-purple-100 text-purple-600 dark:bg-purple-900',
+                news: 'bg-red-100 text-red-600 dark:bg-red-900',
+                entertainment: 'bg-pink-100 text-pink-600 dark:bg-pink-900',
+                education: 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900',
+                shopping: 'bg-orange-100 text-orange-600 dark:bg-orange-900',
                 other: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
-            };
-
-            const categoryNames = {
-                general: 'Umum',
-                work: 'Kerja',
-                social: 'Sosial Media',
-                news: 'Berita',
-                entertainment: 'Hiburan',
-                education: 'Pendidikan',
-                shopping: 'Belanja',
-                other: 'Lainnya'
             };
             
             card.innerHTML = `
@@ -566,31 +538,31 @@
                         <div class="flex items-center space-x-2 mb-2">
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${categoryColors[link.category] || categoryColors.general}">
                                 <i class="${categoryIcons[link.category] || categoryIcons.general} mr-1"></i>
-                                ${categoryNames[link.category] || 'Lainnya'}
+                                ${link.category === 'general' ? 'Umum' : link.category === 'work' ? 'Kerja' : link.category === 'social' ? 'Sosial Media' : link.category === 'news' ? 'Berita' : link.category === 'entertainment' ? 'Hiburan' : link.category === 'education' ? 'Pendidikan' : link.category === 'shopping' ? 'Belanja' : 'Lainnya'}
                             </span>
                             <span class="text-xs text-gray-400">${formatDate(link.dateAdded)}</span>
                         </div>
-                        <h3 class="font-semibold text-lg mb-1 break-words">${escapeHtml(link.title)}</h3>
-                        ${link.description ? `<p class="text-gray-600 dark:text-gray-400 text-sm mb-2 break-words">${escapeHtml(link.description)}</p>` : ''}
-                        <p class="text-blue-600 dark:text-blue-400 text-sm truncate">${escapeHtml(link.url)}</p>
+                        <h3 class="font-semibold text-lg mb-1">${link.title}</h3>
+                        ${link.description ? `<p class="text-gray-600 dark:text-gray-400 text-sm mb-2">${link.description}</p>` : ''}
+                        <p class="text-blue-600 dark:text-blue-400 text-sm truncate">${link.url}</p>
                     </div>
                     
-                    <div class="flex flex-col space-y-2 flex-shrink-0">
-                        <button onclick="openLink('${escapeHtml(link.url)}')" 
+                    <div class="flex flex-col space-y-2">
+                        <button onclick="openLink('${link.url}')" 
                                 class="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg smooth-transition" title="Buka Link">
                             <i class="fas fa-external-link-alt"></i>
                         </button>
-                        ${appData.waNumber ? `
-                        <button onclick="sendToWA(${realIndex})" 
+                        ${waNumber ? `
+                        <button onclick="sendToWA('${link.title}','${link.url}', ${index})" 
                                 class="p-2 bg-green-600 hover:bg-green-700 text-white rounded-lg smooth-transition" title="Share ke WhatsApp">
                             <i class="fab fa-whatsapp"></i>
                         </button>
                         ` : ''}
-                        <button onclick="copyLink('${escapeHtml(link.url)}')" 
+                        <button onclick="copyLink('${link.url}')" 
                                 class="p-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg smooth-transition" title="Copy Link">
                             <i class="fas fa-copy"></i>
                         </button>
-                        <button onclick="deleteLink(${realIndex})" 
+                        <button onclick="deleteLink(${index})" 
                                 class="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg smooth-transition" title="Hapus Link">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -608,17 +580,17 @@
             const description = document.getElementById('linkDescription').value.trim();
             
             if (!title || !url) {
-                showToast('Judul dan URL harus diisi!', 'error');
+                showNotification("Judul dan URL harus diisi!", "error");
                 return;
             }
             
             if (!isValidURL(url)) {
-                showToast('URL tidak valid!', 'error');
+                showNotification("URL tidak valid!", "error");
                 return;
             }
             
             const newLink = {
-                id: Date.now() + Math.random(), // Memastikan ID unik
+                id: Date.now(),
                 title,
                 url: url.startsWith('http') ? url : 'https://' + url,
                 category,
@@ -627,114 +599,94 @@
                 clickCount: 0
             };
             
-            appData.links.unshift(newLink);
-            saveAppData();
+            links.unshift(newLink);
             renderLinks();
             updateStats();
             setupFilterTags();
-            closeAddModal();
+            closeAddLinkModal();
             clearAddLinkForm();
-            showToast('Link berhasil ditambahkan!', 'success');
+            showNotification("Link berhasil ditambahkan!", "success");
         }
 
         function deleteLink(index) {
-            if (!confirm('Yakin ingin menghapus link ini?')) {
-                return;
-            }
-            
-            try {
-                // Pastikan index valid
-                if (index >= 0 && index < appData.links.length) {
-                    const deletedLink = appData.links[index];
-                    appData.links.splice(index, 1);
-                    saveAppData();
-                    renderLinks();
-                    updateStats();
-                    setupFilterTags();
-                    showToast(`Link "${deletedLink.title}" berhasil dihapus!`, 'success');
-                } else {
-                    showToast('Error: Link tidak ditemukan!', 'error');
-                }
-            } catch (error) {
-                console.error('Error deleting link:', error);
-                showToast('Gagal menghapus link!', 'error');
+            if (confirm("Yakin ingin menghapus link ini?")) {
+                links.splice(index, 1);
+                renderLinks();
+                updateStats();
+                setupFilterTags();
+                showNotification("Link berhasil dihapus!", "success");
             }
         }
 
         function openLink(url) {
-            try {
-                // Update click count
-                const link = appData.links.find(l => l.url === url);
-                if (link) {
-                    link.clickCount = (link.clickCount || 0) + 1;
-                    saveAppData();
-                }
-                window.open(url, "_blank");
-            } catch (error) {
-                showToast('Gagal membuka link!', 'error');
+            // Update click count
+            const link = links.find(l => l.url === url);
+            if (link) {
+                link.clickCount = (link.clickCount || 0) + 1;
+                localStorage.setItem("links", JSON.stringify(links));
             }
+            window.open(url, "_blank");
         }
 
-        function sendToWA(linkIndex) {
-            if (!appData.waNumber) {
-                showToast('Nomor WhatsApp belum diatur!', 'error');
+        function sendToWA(title, url, index) {
+            if (!waNumber) {
+                showNotification("Nomor WhatsApp belum diatur!", "error");
                 return;
             }
             
-            try {
-                const link = appData.links[linkIndex];
-                if (!link) {
-                    showToast('Link tidak ditemukan!', 'error');
-                    return;
-                }
-                
-                const message = encodeURIComponent(`*${link.title}*\n\n${link.url}\n\n_Dibagikan dari LinkHub_`);
-                window.open(`https://wa.me/${appData.waNumber}?text=${message}`, "_blank");
-                
-                // Update shared count
-                appData.sharedCount++;
-                saveAppData();
-                updateStats();
-                showToast('Link berhasil dibagikan!', 'success');
-            } catch (error) {
-                showToast('Gagal membagikan link!', 'error');
-            }
+            const message = encodeURIComponent(`*${title}*\n\n${url}\n\n_Dibagikan dari LinkHub_`);
+            window.open(`https://wa.me/${waNumber}?text=${message}`, "_blank");
+            
+            // Update shared count
+            sharedCount++;
+            localStorage.setItem("sharedCount", sharedCount.toString());
+            updateStats();
+            showNotification("Link berhasil dibagikan!", "success");
         }
 
         function copyLink(url) {
-            try {
-                navigator.clipboard.writeText(url).then(() => {
-                    showToast('Link berhasil dicopy!', 'success');
-                }).catch(() => {
-                    // Fallback untuk browser lama
-                    const textArea = document.createElement('textarea');
-                    textArea.value = url;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    showToast('Link berhasil dicopy!', 'success');
-                });
-            } catch (error) {
-                showToast('Gagal copy link!', 'error');
-            }
-        }
-
-        // Search functionality
-        function setupSearch() {
-            document.getElementById('searchInput').addEventListener('input', () => {
-                renderLinks();
+            navigator.clipboard.writeText(url).then(() => {
+                showNotification("Link berhasil dicopy!", "success");
+            }).catch(() => {
+                showNotification("Gagal copy link!", "error");
             });
         }
 
-        // Filter functionality
+        // Search and Filter
+        function setupSearch() {
+            elements.searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                
+                if (query === '') {
+                    renderLinks();
+                    return;
+                }
+                
+                const filteredLinks = links.filter(link => 
+                    link.title.toLowerCase().includes(query) ||
+                    link.url.toLowerCase().includes(query) ||
+                    link.description?.toLowerCase().includes(query) ||
+                    link.category.toLowerCase().includes(query)
+                );
+                
+                renderLinks(filteredLinks);
+            });
+        }
+
         function setupFilterTags() {
-            const categories = [...new Set(appData.links.map(link => link.category))];
-            const filterContainer = document.getElementById('filterTags');
+            const categories = [...new Set(links.map(link => link.category))];
+            const filterContainer = elements.filterTags;
+            
+            if (categories.length <= 1) {
+                filterContainer.classList.add('hidden');
+                return;
+            }
+            
+            filterContainer.classList.remove('hidden');
             
             const categoryNames = {
                 general: 'Umum',
-                work: 'Kerja',
+                work: 'Kerja', 
                 social: 'Sosial Media',
                 news: 'Berita',
                 entertainment: 'Hiburan',
@@ -746,7 +698,7 @@
             const categoryIcons = {
                 all: 'fas fa-globe',
                 general: 'fas fa-globe',
-                work: 'fas fa-briefcase',
+                work: 'fas fa-briefcase', 
                 social: 'fas fa-users',
                 news: 'fas fa-newspaper',
                 entertainment: 'fas fa-film',
@@ -755,38 +707,48 @@
                 other: 'fas fa-folder'
             };
             
-            let html = `
-                <button class="filter-tag ${appData.currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">
+            filterContainer.innerHTML = `
+                <button class="filter-tag active" data-category="all">
                     <i class="${categoryIcons.all} mr-1"></i> Semua
                 </button>
-            `;
-            
-            categories.forEach(category => {
-                html += `
-                    <button class="filter-tag ${appData.currentFilter === category ? 'active' : ''}" onclick="setFilter('${category}')">
+                ${categories.map(category => `
+                    <button class="filter-tag" data-category="${category}">
                         <i class="${categoryIcons[category]} mr-1"></i> ${categoryNames[category] || category}
                     </button>
-                `;
-            });
+                `).join('')}
+            `;
             
-            filterContainer.innerHTML = html;
+            // Add filter functionality
+            filterContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-tag')) {
+                    // Remove active class from all tags
+                    filterContainer.querySelectorAll('.filter-tag').forEach(tag => {
+                        tag.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tag
+                    e.target.classList.add('active');
+                    
+                    const category = e.target.dataset.category;
+                    
+                    if (category === 'all') {
+                        renderLinks();
+                    } else {
+                        const filteredLinks = links.filter(link => link.category === category);
+                        renderLinks(filteredLinks);
+                    }
+                }
+            });
         }
 
-        function setFilter(category) {
-            appData.currentFilter = category;
-            setupFilterTags();
-            renderLinks();
-        }
-
-        // Modal management
+        // Modal Management
         function showAddLinkModal() {
-            document.getElementById('addLinkModal').classList.remove('hidden');
+            elements.addLinkModal.classList.remove("hidden");
             document.getElementById('linkTitle').focus();
         }
 
-        function closeAddModal() {
-            document.getElementById('addLinkModal').classList.add('hidden');
-            clearAddLinkForm();
+        function closeAddLinkModal() {
+            elements.addLinkModal.classList.add("hidden");
         }
 
         function clearAddLinkForm() {
@@ -796,7 +758,7 @@
             document.getElementById('linkDescription').value = '';
         }
 
-        // Utility functions
+        // Utility Functions
         function isValidURL(string) {
             try {
                 new URL(string.startsWith('http') ? string : 'https://' + string);
@@ -807,146 +769,76 @@
         }
 
         function formatDate(dateString) {
-            try {
-                const date = new Date(dateString);
-                const now = new Date();
-                const diffTime = Math.abs(now - date);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                
-                if (diffDays === 1) return 'Hari ini';
-                if (diffDays === 2) return 'Kemarin';
-                if (diffDays <= 7) return `${diffDays} hari lalu`;
-                
-                return date.toLocaleDateString('id-ID', { 
-                    day: 'numeric', 
-                    month: 'short', 
-                    year: 'numeric' 
-                });
-            } catch (error) {
-                return 'Tanggal tidak valid';
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return 'Hari ini';
+            if (diffDays === 2) return 'Kemarin';
+            if (diffDays <= 7) return `${diffDays} hari lalu`;
+            
+            return date.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric' 
+            });
         }
 
         function updateStats() {
-            document.getElementById('totalLinks').textContent = appData.links.length;
-            document.getElementById('sharedCount').textContent = appData.sharedCount;
+            elements.totalLinks.textContent = links.length;
+            elements.sharedCountEl.textContent = sharedCount;
             
-            const categories = [...new Set(appData.links.map(link => link.category))];
-            document.getElementById('totalCategories').textContent = categories.length || 0;
+            const categories = [...new Set(links.map(link => link.category))];
+            elements.totalCategories.textContent = categories.length;
             
-            if (appData.links.length > 0) {
-                const lastLink = appData.links[0];
-                document.getElementById('lastAdded').textContent = formatDate(lastLink.dateAdded);
+            if (links.length > 0) {
+                const lastLink = links[0];
+                elements.lastAdded.textContent = formatDate(lastLink.dateAdded);
             } else {
-                document.getElementById('lastAdded').textContent = 'Belum ada';
+                elements.lastAdded.textContent = 'Belum ada';
             }
         }
 
-        // Offline detection
-        function setupOfflineDetection() {
-            const offlineIndicator = document.getElementById('offlineIndicator');
-
-            function updateOnlineStatus() {
-                if (navigator.onLine) {
-                    offlineIndicator.classList.add('hidden');
-                } else {
-                    offlineIndicator.classList.remove('hidden');
-                }
-            }
-
-            window.addEventListener('online', updateOnlineStatus);
-            window.addEventListener('offline', updateOnlineStatus);
-            updateOnlineStatus();
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform translate-x-full transition-transform duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Animate out
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
         }
 
-        // PWA Service Worker dan Manifest
+        // PWA Setup
         function setupPWA() {
-            // Buat manifest dinamis
-            const manifest = {
-                name: "LinkHub - Kelola Link Favorit",
-                short_name: "LinkHub",
-                description: "Aplikasi untuk mengelola dan menyimpan link favorit Anda dengan fitur offline",
-                start_url: "./",
-                display: "standalone",
-                orientation: "portrait-primary",
-                background_color: "#ffffff",
-                theme_color: "#3b82f6",
-                categories: ["productivity", "utilities"],
-                lang: "id",
-                scope: "./",
-                icons: [
-                    {
-                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
-                        sizes: "72x72",
-                        type: "image/svg+xml",
-                        purpose: "any"
-                    },
-                    {
-                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
-                        sizes: "96x96",
-                        type: "image/svg+xml",
-                        purpose: "any"
-                    },
-                    {
-                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
-                        sizes: "128x128",
-                        type: "image/svg+xml",
-                        purpose: "any"
-                    },
-                    {
-                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='144' height='144' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
-                        sizes: "144x144",
-                        type: "image/svg+xml",
-                        purpose: "any"
-                    },
-                    {
-                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='152' height='152' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
-                        sizes: "152x152",
-                        type: "image/svg+xml",
-                        purpose: "any"
-                    },
-                    {
-                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
-                        sizes: "192x192",
-                        type: "image/svg+xml",
-                        purpose: "any"
-                    },
-                    {
-                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='384' height='384' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
-                        sizes: "384x384",
-                        type: "image/svg+xml",
-                        purpose: "any"
-                    },
-                    {
-                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
-                        sizes: "512x512",
-                        type: "image/svg+xml",
-                        purpose: "any"
-                    }
-                ]
-            };
-
-            // Set manifest
-            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-            const manifestUrl = URL.createObjectURL(manifestBlob);
-            document.getElementById('manifest-placeholder').href = manifestUrl;
-
-            // Service Worker yang lebih lengkap
+            // Create and register comprehensive service worker
             if ('serviceWorker' in navigator) {
                 const swCode = `
-                const CACHE_NAME = 'linkhub-v1.0.0';
-                const STATIC_CACHE = 'linkhub-static-v1.0.0';
-                const DYNAMIC_CACHE = 'linkhub-dynamic-v1.0.0';
-
-                const STATIC_ASSETS = [
-                    './',
-                    './index.html',
+                const CACHE_NAME = 'linkhub-v2';
+                const CACHE_URLS = [
+                    '/',
                     'https://cdn.tailwindcss.com',
                     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
                     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
@@ -954,131 +846,101 @@
                     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2'
                 ];
 
-                // Install event
+                // Install event - cache all resources
                 self.addEventListener('install', event => {
-                    console.log('SW: Installing...');
                     event.waitUntil(
-                        caches.open(STATIC_CACHE)
+                        caches.open(CACHE_NAME)
                             .then(cache => {
-                                console.log('SW: Caching static assets');
-                                return cache.addAll(STATIC_ASSETS);
-                            })
-                            .then(() => {
-                                console.log('SW: Static assets cached');
-                                return self.skipWaiting();
+                                console.log('Caching app shell');
+                                return cache.addAll(CACHE_URLS.map(url => new Request(url, {
+                                    mode: 'cors',
+                                    credentials: 'omit'
+                                })));
                             })
                             .catch(error => {
-                                console.error('SW: Error caching static assets:', error);
+                                console.log('Cache failed for some resources:', error);
+                                // Cache at least the main page
+                                return caches.open(CACHE_NAME).then(cache => cache.add('/'));
                             })
                     );
+                    self.skipWaiting();
                 });
 
-                // Activate event
+                // Activate event - clean up old caches
                 self.addEventListener('activate', event => {
-                    console.log('SW: Activating...');
                     event.waitUntil(
-                        caches.keys()
-                            .then(cacheNames => {
-                                return Promise.all(
-                                    cacheNames.map(cacheName => {
-                                        if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
-                                            console.log('SW: Deleting old cache:', cacheName);
-                                            return caches.delete(cacheName);
-                                        }
-                                    })
-                                );
-                            })
-                            .then(() => {
-                                console.log('SW: Activated');
-                                return self.clients.claim();
+                        caches.keys().then(cacheNames => {
+                            return Promise.all(
+                                cacheNames.map(cacheName => {
+                                    if (cacheName !== CACHE_NAME) {
+                                        console.log('Deleting old cache:', cacheName);
+                                        return caches.delete(cacheName);
+                                    }
+                                })
+                            );
+                        })
+                    );
+                    self.clients.claim();
+                });
+
+                // Fetch event - serve from cache, fallback to network
+                self.addEventListener('fetch', event => {
+                    // Skip non-GET requests
+                    if (event.request.method !== 'GET') {
+                        return;
+                    }
+
+                    // Skip cross-origin requests that aren't in our cache list
+                    if (!event.request.url.startsWith(self.location.origin) && 
+                        !CACHE_URLS.some(url => event.request.url.includes(url.replace('https://', '')))) {
+                        return;
+                    }
+
+                    event.respondWith(
+                        caches.match(event.request)
+                            .then(response => {
+                                // Return cached response if found
+                                if (response) {
+                                    return response;
+                                }
+
+                                // Clone the request
+                                const fetchRequest = event.request.clone();
+
+                                return fetch(fetchRequest).then(response => {
+                                    // Check if valid response
+                                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                                        return response;
+                                    }
+
+                                    // Clone the response
+                                    const responseToCache = response.clone();
+
+                                    // Add to cache
+                                    caches.open(CACHE_NAME)
+                                        .then(cache => {
+                                            cache.put(event.request, responseToCache);
+                                        });
+
+                                    return response;
+                                }).catch(() => {
+                                    // Return offline page or default response
+                                    if (event.request.destination === 'document') {
+                                        return caches.match('/');
+                                    }
+                                });
                             })
                     );
                 });
 
-                // Fetch event - Network First for API, Cache First for assets
-                self.addEventListener('fetch', event => {
-                    const { request } = event;
-                    const url = new URL(request.url);
-
-                    // Skip non-GET requests
-                    if (request.method !== 'GET') return;
-
-                    // Skip chrome-extension requests
-                    if (url.protocol === 'chrome-extension:') return;
-
-                    // Handle different types of requests
-                    if (STATIC_ASSETS.some(asset => request.url.includes(asset.replace('./', '')))) {
-                        // Cache first for static assets
-                        event.respondWith(cacheFirst(request));
-                    } else if (request.destination === 'document') {
-                        // Network first for HTML documents
-                        event.respondWith(networkFirst(request));
-                    } else {
-                        // Stale while revalidate for other resources
-                        event.respondWith(staleWhileRevalidate(request));
-                    }
-                });
-
-                // Cache strategies
-                async function cacheFirst(request) {
-                    try {
-                        const cachedResponse = await caches.match(request);
-                        if (cachedResponse) {
-                            return cachedResponse;
-                        }
-
-                        const networkResponse = await fetch(request);
-                        if (networkResponse.ok) {
-                            const cache = await caches.open(STATIC_CACHE);
-                            cache.put(request, networkResponse.clone());
-                        }
-                        return networkResponse;
-                    } catch (error) {
-                        console.error('Cache first failed:', error);
-                        return caches.match('./');
-                    }
-                }
-
-                async function networkFirst(request) {
-                    try {
-                        const networkResponse = await fetch(request);
-                        if (networkResponse.ok) {
-                            const cache = await caches.open(DYNAMIC_CACHE);
-                            cache.put(request, networkResponse.clone());
-                        }
-                        return networkResponse;
-                    } catch (error) {
-                        console.log('Network first falling back to cache');
-                        const cachedResponse = await caches.match(request);
-                        return cachedResponse || caches.match('./');
-                    }
-                }
-
-                async function staleWhileRevalidate(request) {
-                    const cache = await caches.open(DYNAMIC_CACHE);
-                    const cachedResponse = await cache.match(request);
-                    
-                    const fetchPromise = fetch(request).then(networkResponse => {
-                        if (networkResponse.ok) {
-                            cache.put(request, networkResponse.clone());
-                        }
-                        return networkResponse;
-                    }).catch(() => cachedResponse);
-
-                    return cachedResponse || fetchPromise;
-                }
-
-                // Handle background sync
+                // Background sync for offline actions
                 self.addEventListener('sync', event => {
-                    console.log('SW: Background sync:', event.tag);
+                    if (event.tag === 'background-sync') {
+                        console.log('Background sync triggered');
+                    }
                 });
 
-                // Handle push notifications (future feature)
-                self.addEventListener('push', event => {
-                    console.log('SW: Push notification received');
-                });
-
-                // Message handling
+                // Handle messages from main thread
                 self.addEventListener('message', event => {
                     if (event.data && event.data.type === 'SKIP_WAITING') {
                         self.skipWaiting();
@@ -1086,107 +948,91 @@
                 });
                 `;
 
-                const blob = new Blob([swCode], { type: 'text/javascript' });
-                const swUrl = URL.createObjectURL(blob);
+                // Convert to blob URL and register
+                const swBlob = new Blob([swCode], { type: 'text/javascript' });
+                const swUrl = URL.createObjectURL(swBlob);
                 
-                navigator.serviceWorker.register(swUrl, { scope: './' })
+                navigator.serviceWorker.register(swUrl)
                     .then(registration => {
-                        console.log('SW registered successfully:', registration);
+                        console.log('SW registered successfully');
                         
+                        // Handle updates
                         registration.addEventListener('updatefound', () => {
                             const newWorker = registration.installing;
                             newWorker.addEventListener('statechange', () => {
                                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    showToast('Update tersedia! Refresh halaman untuk update.', 'info');
+                                    showUpdateNotification(newWorker);
                                 }
                             });
                         });
                     })
-                    .catch(error => {
-                        console.error('SW registration failed:', error);
-                    });
+                    .catch(error => console.log('SW registration failed:', error));
             }
 
-            // Install prompt handling
-            let deferredPrompt = null;
             
+            // Handle install prompt
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
                 
-                // Show install banner after delay
-                setTimeout(() => {
-                    showInstallBanner();
-                }, 5000);
-            });
-
-            // Install banner functionality
-            function showInstallBanner() {
-                const banner = document.getElementById('installBanner');
-                const installBtn = document.getElementById('installAppBtn');
-                const dismissBtn = document.getElementById('dismissInstallBtn');
+                const installPrompt = document.getElementById('installPrompt');
+                installPrompt.classList.remove('hidden');
                 
-                if (!localStorage.getItem('linkhub_install_dismissed') && deferredPrompt) {
-                    banner.classList.remove('hidden');
-                    
-                    installBtn.addEventListener('click', async () => {
-                        if (deferredPrompt) {
-                            deferredPrompt.prompt();
-                            const { outcome } = await deferredPrompt.userChoice;
-                            
-                            if (outcome === 'accepted') {
-                                showToast('Terima kasih! LinkHub sedang diinstall...', 'success');
-                            }
-                            
-                            deferredPrompt = null;
-                            banner.classList.add('hidden');
-                        }
-                    });
-                    
-                    dismissBtn.addEventListener('click', () => {
-                        banner.classList.add('hidden');
-                        localStorage.setItem('linkhub_install_dismissed', 'true');
-                    });
-                }
-            }
-
-            // Check if app is installed
-            window.addEventListener('appinstalled', (e) => {
-                console.log('LinkHub installed successfully');
-                showToast('LinkHub berhasil diinstall! 🎉', 'success');
-                localStorage.setItem('linkhub_install_dismissed', 'true');
-                document.getElementById('installBanner').classList.add('hidden');
+                document.getElementById('installBtn').addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const result = await deferredPrompt.userChoice;
+                        deferredPrompt = null;
+                        installPrompt.classList.add('hidden');
+                    }
+                });
+                
+                document.getElementById('dismissInstall').addEventListener('click', () => {
+                    installPrompt.classList.add('hidden');
+                });
             });
-
-            // Handle standalone mode
-            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-                console.log('Running in standalone mode');
-                document.body.classList.add('standalone-mode');
-            }
         }
 
-        // Event listeners
+        // Event Listeners
         function setupEventListeners() {
             // Theme toggle
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            elements.themeToggle.addEventListener('click', toggleTheme);
+            
+            // WhatsApp setup
+            elements.saveWABtn.addEventListener('click', saveWANumber);
+            elements.skipWABtn.addEventListener('click', skipWASetup);
             
             // WhatsApp settings
-            document.getElementById('waSettingsBtn').addEventListener('click', showWASettings);
+            elements.waSettingsBtn.addEventListener('click', () => {
+                elements.waSettingsModal.classList.remove('hidden');
+            });
             
-            // Add link button
-            document.getElementById('addLinkBtn').addEventListener('click', showAddLinkModal);
+            document.getElementById('closeWASettings').addEventListener('click', () => {
+                elements.waSettingsModal.classList.add('hidden');
+            });
+            
+            document.getElementById('updateWABtn').addEventListener('click', updateWANumber);
+            
+            // Add link modal
+            elements.addLinkBtn.addEventListener('click', showAddLinkModal);
+            
+            document.getElementById('closeAddModal').addEventListener('click', closeAddLinkModal);
+            document.getElementById('cancelAddBtn').addEventListener('click', closeAddLinkModal);
+            document.getElementById('saveLinkBtn').addEventListener('click', addLink);
             
             // Search
             setupSearch();
             
             // Close modals on backdrop click
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('fixed') && e.target.classList.contains('inset-0')) {
-                    e.target.classList.add('hidden');
-                }
+            [elements.waPopup, elements.addLinkModal, elements.waSettingsModal].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
             });
             
-            // Enter key handling
+            // Form submission
             document.getElementById('linkTitle').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -1201,7 +1047,7 @@
                 }
             });
             
-            document.getElementById('waInput').addEventListener('keypress', (e) => {
+            elements.waInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     saveWANumber();
@@ -1209,29 +1055,55 @@
             });
         }
 
-        // Initialize app
-        function initApp() {
-            loadAppData();
-            applyTheme();
-            checkWANumber();
-            renderLinks();
-            updateStats();
-            setupFilterTags();
-            setupEventListeners();
-            setupOfflineDetection();
-            setupPWA();
-            
-            // Welcome message untuk user pertama
-            if (appData.links.length === 0 && !localStorage.getItem('linkhub_welcomed')) {
-                setTimeout(() => {
-                    showToast('Selamat datang di LinkHub! 🎉', 'success');
-                    localStorage.setItem('linkhub_welcomed', 'true');
-                }, 1000);
+        // Add CSS styles for filter tags
+        const style = document.createElement('style');
+        style.textContent = `
+            .filter-tag {
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem 1rem;
+                background-color: #f3f4f6;
+                border-radius: 0.75rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                transition: all 0.2s;
+                border: 2px solid transparent;
             }
-        }
+            
+            .dark .filter-tag {
+                background-color: #374151;
+                color: #d1d5db;
+            }
+            
+            .filter-tag:hover {
+                background-color: #e5e7eb;
+            }
+            
+            .dark .filter-tag:hover {
+                background-color: #4b5563;
+            }
+            
+            .filter-tag.active {
+                background-color: #3b82f6;
+                color: white;
+                border-color: #2563eb;
+            }
+            
+            .dark .filter-tag.active {
+                background-color: #3b82f6;
+                color: white;
+            }
+        `;
+        document.head.appendChild(style);
 
-        // Start app when DOM loaded
+        // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
+        
+        // Expose functions to global scope for onclick handlers
+        window.openLink = openLink;
+        window.sendToWA = sendToWA;
+        window.copyLink = copyLink;
+        window.deleteLink = deleteLink;
     </script>
 </body>
 </html>
