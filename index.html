@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkHub - Kelola Link Anda</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="description" content="LinkHub - Aplikasi untuk mengelola dan menyimpan link favorit Anda">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="LinkHub">
+    
+    <!-- Manifest -->
+     <link rel="manifest" href="manifest.json">
+
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkxpbmtIdWIiLAogICJzaG9ydF9uYW1lIjogIkxpbmtIdWIiLAogICJkZXNjcmlwdGlvbiI6ICJBcGxpa2FzaSB1bnR1ayBtZW5nZWxvbGEgZGFuIG1lbnlpbXBhbiBsaW5rIGZhdm9yaXQgQW5kYSIsCiAgInN0YXJ0X3VybCI6ICIvIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwKICAidGhlbWVfY29sb3IiOiAiIzNiODJmNiIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB3aWR0aD0nMTkyJyBoZWlnaHQ9JzE5Micgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSclMjMzYjgyZjYnJTNFJTNDcGF0aCBkPSdNMTAgNHYzaDRWNGEyIDIgMCAwIDAtMiAySDhBMiAyIDAgMCAwIDYgOHY4YTIgMiAwIDAgMCAyIDJoOGEyIDIgMCAwIDAgMi0yVjhhMiAyIDAgMCAwLTItMmgtNHptMCAzaDR2OUg2VjhoNHYyWm0tMiA1aDJ2LTJIOHYyWm0wIDJoMnYtMkg4djJabTQgMGgydi0yaC0ydjJabTAtMmgydi0yaC0ydjJaJy8lM0UlM0Mvc3ZnJTNFIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 24 24' fill='%233b82f6'><path d='M10 4v3h4V4a2 2 0 0 0-2 2H8A2 2 0 0 0 6 8v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4zm0 3h4v9H6V8h4v2Zm-2 5h2v-2H8v2Zm0 2h2v-2H8v2Zm4 0h2v-2h-2v2Zm0-2h2v-2h-2v2Z'/></svg>">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .smooth-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        
+        .link-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .floating-btn {
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen smooth-transition">
+    
+    <!-- PWA Install Prompt -->
+    <div id="installPrompt" class="fixed top-0 left-0 right-0 bg-blue-600 text-white p-3 z-50 hidden">
+        <div class="flex items-center justify-between max-w-md mx-auto">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-download"></i>
+                <span class="text-sm">Install LinkHub sebagai aplikasi</span>
+            </div>
+            <div class="space-x-2">
+                <button id="installBtn" class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium">Install</button>
+                <button id="dismissInstall" class="text-white opacity-75">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 bg-white/80 dark:bg-gray-900/80 glass-effect border-b border-gray-200 dark:border-gray-700 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-link text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">LinkHub</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Kelola link favorit Anda</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 smooth-transition">
+                        <i class="fas fa-sun dark:hidden"></i>
+                        <i class="fas fa-moon hidden dark:block"></i>
+                    </button>
+                    
+                    <!-- WhatsApp Settings -->
+                    <button id="waSettingsBtn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 smooth-transition">
+                        <i class="fab fa-whatsapp text-green-500"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="mt-4 relative">
+                <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+                <input type="text" id="searchInput" placeholder="Cari link..." 
+                       class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 smooth-transition">
+            </div>
+            
+            <!-- Filter Tags -->
+            <div id="filterTags" class="mt-3 flex flex-wrap gap-2 hidden">
+                <button class="filter-tag active" data-category="all">
+                    <i class="fas fa-globe mr-1"></i> Semua
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-link text-blue-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold" id="totalLinks">0</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Total Link</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-tags text-green-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold" id="totalCategories">0</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Kategori</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                        <i class="fab fa-whatsapp text-green-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold" id="sharedCount">0</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Dibagikan</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-clock text-orange-600"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium" id="lastAdded">Belum ada</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Terakhir</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Link List -->
+        <div class="space-y-4" id="linkList">
+            <!-- Links will be rendered here -->
+        </div>
+        
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-16 hidden">
+            <div class="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-link text-gray-400 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Belum ada link tersimpan</h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-6">Mulai simpan link favorit Anda dengan menekan tombol tambah di bawah</p>
+        </div>
+    </main>
+
+    <!-- Floating Add Button -->
+    <button id="addLinkBtn" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full floating-btn smooth-transition flex items-center justify-center z-30">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+
+    <!-- Popup Input Nomor WhatsApp -->
+    <div id="waPopup" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-sm">
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fab fa-whatsapp text-green-600 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold mb-2">Setup WhatsApp</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Masukkan nomor WhatsApp untuk fitur share</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nomor WhatsApp</label>
+                    <input type="tel" id="waInput" placeholder="6281234567890"
+                           class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500">
+                    <p class="text-xs text-gray-500 mt-1">Format: 62812345678XX (tanpa +)</p>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <button id="saveWABtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium smooth-transition">
+                        <i class="fas fa-save mr-2"></i>Simpan
+                    </button>
+                    <button id="skipWABtn" class="px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg smooth-transition">
+                        Skip
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Link Modal -->
+    <div id="addLinkModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-md">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold">Tambah Link Baru</h2>
+                <button id="closeAddModal" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Judul Link</label>
+                    <input type="text" id="linkTitle" placeholder="Masukkan judul link"
+                           class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">URL Link</label>
+                    <input type="url" id="linkUrl" placeholder="https://example.com"
+                           class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Kategori</label>
+                    <select id="linkCategory" class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500">
+                        <option value="general">Umum</option>
+                        <option value="work">Kerja</option>
+                        <option value="social">Sosial Media</option>
+                        <option value="news">Berita</option>
+                        <option value="entertainment">Hiburan</option>
+                        <option value="education">Pendidikan</option>
+                        <option value="shopping">Belanja</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Deskripsi (Opsional)</label>
+                    <textarea id="linkDescription" placeholder="Tambahkan deskripsi singkat"
+                              class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 h-20 resize-none"></textarea>
+                </div>
+                
+                <div class="flex space-x-2">
+                    <button id="saveLinkBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium smooth-transition">
+                        <i class="fas fa-save mr-2"></i>Simpan Link
+                    </button>
+                    <button id="cancelAddBtn" class="px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg smooth-transition">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Settings Modal -->
+    <div id="waSettingsModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl w-full max-w-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold">Pengaturan WhatsApp</h2>
+                <button id="closeWASettings" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nomor WhatsApp Saat Ini</label>
+                    <input type="tel" id="currentWANumber" 
+                           class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="flex space-x-2">
+                    <button id="updateWABtn" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium smooth-transition">
+                        <i class="fab fa-whatsapp mr-2"></i>Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let links = JSON.parse(localStorage.getItem("links")) || [];
+        let waNumber = localStorage.getItem("waNumber");
+        let currentTheme = localStorage.getItem("theme") || "light";
+        let sharedCount = parseInt(localStorage.getItem("sharedCount")) || 0;
+        let deferredPrompt;
+
+        // DOM Elements
+        const elements = {
+            waPopup: document.getElementById("waPopup"),
+            waInput: document.getElementById("waInput"),
+            saveWABtn: document.getElementById("saveWABtn"),
+            skipWABtn: document.getElementById("skipWABtn"),
+            linkList: document.getElementById("linkList"),
+            addLinkBtn: document.getElementById("addLinkBtn"),
+            addLinkModal: document.getElementById("addLinkModal"),
+            searchInput: document.getElementById("searchInput"),
+            themeToggle: document.getElementById("themeToggle"),
+            emptyState: document.getElementById("emptyState"),
+            totalLinks: document.getElementById("totalLinks"),
+            totalCategories: document.getElementById("totalCategories"),
+            sharedCountEl: document.getElementById("sharedCount"),
+            lastAdded: document.getElementById("lastAdded"),
+            waSettingsBtn: document.getElementById("waSettingsBtn"),
+            waSettingsModal: document.getElementById("waSettingsModal"),
+            currentWANumber: document.getElementById("currentWANumber"),
+            filterTags: document.getElementById("filterTags")
+        };
+
+        // Initialize App
+        function initApp() {
+            applyTheme();
+            checkWANumber();
+            renderLinks();
+            updateStats();
+            setupEventListeners();
+            setupPWA();
+            setupFilterTags();
+        }
+
+        // Theme Management
+        function applyTheme() {
+            if (currentTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('theme', currentTheme);
+            applyTheme();
+        }
+
+        // WhatsApp Management
+        function checkWANumber() {
+            if (!waNumber) {
+                elements.waPopup.classList.remove("hidden");
+            }
+            if (waNumber) {
+                elements.currentWANumber.value = waNumber;
+            }
+        }
+
+        function saveWANumber() {
+            const input = elements.waInput.value.trim();
+            if (input) {
+                localStorage.setItem("waNumber", input);
+                waNumber = input;
+                elements.waPopup.classList.add("hidden");
+                elements.currentWANumber.value = input;
+                showNotification("Nomor WhatsApp berhasil disimpan!", "success");
+            } else {
+                showNotification("Masukkan nomor yang valid!", "error");
+            }
+        }
+
+        function skipWASetup() {
+            elements.waPopup.classList.add("hidden");
+        }
+
+        function updateWANumber() {
+            const input = elements.currentWANumber.value.trim();
+            if (input) {
+                localStorage.setItem("waNumber", input);
+                waNumber = input;
+                elements.waSettingsModal.classList.add("hidden");
+                showNotification("Nomor WhatsApp berhasil diupdate!", "success");
+            } else {
+                showNotification("Masukkan nomor yang valid!", "error");
+            }
+        }
+
+        // Link Management
+        function renderLinks(filteredLinks = null) {
+            const linksToRender = filteredLinks || links;
+            elements.linkList.innerHTML = "";
+            
+            if (linksToRender.length === 0) {
+                elements.emptyState.classList.remove("hidden");
+                return;
+            }
+            
+            elements.emptyState.classList.add("hidden");
+            
+            linksToRender.forEach((link, index) => {
+                const actualIndex = links.findIndex(l => l.id === link.id);
+                const linkCard = createLinkCard(link, actualIndex);
+                elements.linkList.appendChild(linkCard);
+            });
+            
+            localStorage.setItem("links", JSON.stringify(links));
+        }
+
+        function createLinkCard(link, index) {
+            const card = document.createElement('div');
+            card.className = 'link-card bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 smooth-transition';
+            
+            const categoryIcons = {
+                general: 'fas fa-globe',
+                work: 'fas fa-briefcase', 
+                social: 'fas fa-users',
+                news: 'fas fa-newspaper',
+                entertainment: 'fas fa-film',
+                education: 'fas fa-graduation-cap',
+                shopping: 'fas fa-shopping-cart',
+                other: 'fas fa-folder'
+            };
+            
+            const categoryColors = {
+                general: 'bg-blue-100 text-blue-600 dark:bg-blue-900',
+                work: 'bg-green-100 text-green-600 dark:bg-green-900',
+                social: 'bg-purple-100 text-purple-600 dark:bg-purple-900',
+                news: 'bg-red-100 text-red-600 dark:bg-red-900',
+                entertainment: 'bg-pink-100 text-pink-600 dark:bg-pink-900',
+                education: 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900',
+                shopping: 'bg-orange-100 text-orange-600 dark:bg-orange-900',
+                other: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+            };
+            
+            card.innerHTML = `
+                <div class="flex items-start justify-between">
+                    <div class="flex-1 mr-4">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${categoryColors[link.category] || categoryColors.general}">
+                                <i class="${categoryIcons[link.category] || categoryIcons.general} mr-1"></i>
+                                ${link.category === 'general' ? 'Umum' : link.category === 'work' ? 'Kerja' : link.category === 'social' ? 'Sosial Media' : link.category === 'news' ? 'Berita' : link.category === 'entertainment' ? 'Hiburan' : link.category === 'education' ? 'Pendidikan' : link.category === 'shopping' ? 'Belanja' : 'Lainnya'}
+                            </span>
+                            <span class="text-xs text-gray-400">${formatDate(link.dateAdded)}</span>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-1">${link.title}</h3>
+                        ${link.description ? `<p class="text-gray-600 dark:text-gray-400 text-sm mb-2">${link.description}</p>` : ''}
+                        <p class="text-blue-600 dark:text-blue-400 text-sm truncate">${link.url}</p>
+                    </div>
+                    
+                    <div class="flex flex-col space-y-2">
+                        <button onclick="openLink('${link.url}')" 
+                                class="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg smooth-transition" title="Buka Link">
+                            <i class="fas fa-external-link-alt"></i>
+                        </button>
+                        ${waNumber ? `
+                        <button onclick="sendToWA('${link.title}','${link.url}', ${index})" 
+                                class="p-2 bg-green-600 hover:bg-green-700 text-white rounded-lg smooth-transition" title="Share ke WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        ` : ''}
+                        <button onclick="copyLink('${link.url}')" 
+                                class="p-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg smooth-transition" title="Copy Link">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button onclick="deleteLink(${index})" 
+                                class="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg smooth-transition" title="Hapus Link">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function addLink() {
+            const title = document.getElementById('linkTitle').value.trim();
+            const url = document.getElementById('linkUrl').value.trim();
+            const category = document.getElementById('linkCategory').value;
+            const description = document.getElementById('linkDescription').value.trim();
+            
+            if (!title || !url) {
+                showNotification("Judul dan URL harus diisi!", "error");
+                return;
+            }
+            
+            if (!isValidURL(url)) {
+                showNotification("URL tidak valid!", "error");
+                return;
+            }
+            
+            const newLink = {
+                id: Date.now(),
+                title,
+                url: url.startsWith('http') ? url : 'https://' + url,
+                category,
+                description,
+                dateAdded: new Date().toISOString(),
+                clickCount: 0
+            };
+            
+            links.unshift(newLink);
+            renderLinks();
+            updateStats();
+            setupFilterTags();
+            closeAddLinkModal();
+            clearAddLinkForm();
+            showNotification("Link berhasil ditambahkan!", "success");
+        }
+
+        function deleteLink(index) {
+            if (confirm("Yakin ingin menghapus link ini?")) {
+                links.splice(index, 1);
+                renderLinks();
+                updateStats();
+                setupFilterTags();
+                showNotification("Link berhasil dihapus!", "success");
+            }
+        }
+
+        function openLink(url) {
+            // Update click count
+            const link = links.find(l => l.url === url);
+            if (link) {
+                link.clickCount = (link.clickCount || 0) + 1;
+                localStorage.setItem("links", JSON.stringify(links));
+            }
+            window.open(url, "_blank");
+        }
+
+        function sendToWA(title, url, index) {
+            if (!waNumber) {
+                showNotification("Nomor WhatsApp belum diatur!", "error");
+                return;
+            }
+            
+            const message = encodeURIComponent(`*${title}*\n\n${url}\n\n_Dibagikan dari LinkHub_`);
+            window.open(`https://wa.me/${waNumber}?text=${message}`, "_blank");
+            
+            // Update shared count
+            sharedCount++;
+            localStorage.setItem("sharedCount", sharedCount.toString());
+            updateStats();
+            showNotification("Link berhasil dibagikan!", "success");
+        }
+
+        function copyLink(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                showNotification("Link berhasil dicopy!", "success");
+            }).catch(() => {
+                showNotification("Gagal copy link!", "error");
+            });
+        }
+
+        // Search and Filter
+        function setupSearch() {
+            elements.searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                
+                if (query === '') {
+                    renderLinks();
+                    return;
+                }
+                
+                const filteredLinks = links.filter(link => 
+                    link.title.toLowerCase().includes(query) ||
+                    link.url.toLowerCase().includes(query) ||
+                    link.description?.toLowerCase().includes(query) ||
+                    link.category.toLowerCase().includes(query)
+                );
+                
+                renderLinks(filteredLinks);
+            });
+        }
+
+        function setupFilterTags() {
+            const categories = [...new Set(links.map(link => link.category))];
+            const filterContainer = elements.filterTags;
+            
+            if (categories.length <= 1) {
+                filterContainer.classList.add('hidden');
+                return;
+            }
+            
+            filterContainer.classList.remove('hidden');
+            
+            const categoryNames = {
+                general: 'Umum',
+                work: 'Kerja', 
+                social: 'Sosial Media',
+                news: 'Berita',
+                entertainment: 'Hiburan',
+                education: 'Pendidikan',
+                shopping: 'Belanja',
+                other: 'Lainnya'
+            };
+            
+            const categoryIcons = {
+                all: 'fas fa-globe',
+                general: 'fas fa-globe',
+                work: 'fas fa-briefcase', 
+                social: 'fas fa-users',
+                news: 'fas fa-newspaper',
+                entertainment: 'fas fa-film',
+                education: 'fas fa-graduation-cap',
+                shopping: 'fas fa-shopping-cart',
+                other: 'fas fa-folder'
+            };
+            
+            filterContainer.innerHTML = `
+                <button class="filter-tag active" data-category="all">
+                    <i class="${categoryIcons.all} mr-1"></i> Semua
+                </button>
+                ${categories.map(category => `
+                    <button class="filter-tag" data-category="${category}">
+                        <i class="${categoryIcons[category]} mr-1"></i> ${categoryNames[category] || category}
+                    </button>
+                `).join('')}
+            `;
+            
+            // Add filter functionality
+            filterContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-tag')) {
+                    // Remove active class from all tags
+                    filterContainer.querySelectorAll('.filter-tag').forEach(tag => {
+                        tag.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tag
+                    e.target.classList.add('active');
+                    
+                    const category = e.target.dataset.category;
+                    
+                    if (category === 'all') {
+                        renderLinks();
+                    } else {
+                        const filteredLinks = links.filter(link => link.category === category);
+                        renderLinks(filteredLinks);
+                    }
+                }
+            });
+        }
+
+        // Modal Management
+        function showAddLinkModal() {
+            elements.addLinkModal.classList.remove("hidden");
+            document.getElementById('linkTitle').focus();
+        }
+
+        function closeAddLinkModal() {
+            elements.addLinkModal.classList.add("hidden");
+        }
+
+        function clearAddLinkForm() {
+            document.getElementById('linkTitle').value = '';
+            document.getElementById('linkUrl').value = '';
+            document.getElementById('linkCategory').value = 'general';
+            document.getElementById('linkDescription').value = '';
+        }
+
+        // Utility Functions
+        function isValidURL(string) {
+            try {
+                new URL(string.startsWith('http') ? string : 'https://' + string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return 'Hari ini';
+            if (diffDays === 2) return 'Kemarin';
+            if (diffDays <= 7) return `${diffDays} hari lalu`;
+            
+            return date.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric' 
+            });
+        }
+
+        function updateStats() {
+            elements.totalLinks.textContent = links.length;
+            elements.sharedCountEl.textContent = sharedCount;
+            
+            const categories = [...new Set(links.map(link => link.category))];
+            elements.totalCategories.textContent = categories.length;
+            
+            if (links.length > 0) {
+                const lastLink = links[0];
+                elements.lastAdded.textContent = formatDate(lastLink.dateAdded);
+            } else {
+                elements.lastAdded.textContent = 'Belum ada';
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform translate-x-full transition-transform duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Animate out
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // PWA Setup
+        function setupPWA() {
+            // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker registered ✅'))
+                .catch(err => console.log('SW registration failed 😢', err));
+        }
+
+            // Handle install prompt
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                const installPrompt = document.getElementById('installPrompt');
+                installPrompt.classList.remove('hidden');
+                
+                document.getElementById('installBtn').addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const result = await deferredPrompt.userChoice;
+                        deferredPrompt = null;
+                        installPrompt.classList.add('hidden');
+                    }
+                });
+                
+                document.getElementById('dismissInstall').addEventListener('click', () => {
+                    installPrompt.classList.add('hidden');
+                });
+            });
+        }
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Theme toggle
+            elements.themeToggle.addEventListener('click', toggleTheme);
+            
+            // WhatsApp setup
+            elements.saveWABtn.addEventListener('click', saveWANumber);
+            elements.skipWABtn.addEventListener('click', skipWASetup);
+            
+            // WhatsApp settings
+            elements.waSettingsBtn.addEventListener('click', () => {
+                elements.waSettingsModal.classList.remove('hidden');
+            });
+            
+            document.getElementById('closeWASettings').addEventListener('click', () => {
+                elements.waSettingsModal.classList.add('hidden');
+            });
+            
+            document.getElementById('updateWABtn').addEventListener('click', updateWANumber);
+            
+            // Add link modal
+            elements.addLinkBtn.addEventListener('click', showAddLinkModal);
+            
+            document.getElementById('closeAddModal').addEventListener('click', closeAddLinkModal);
+            document.getElementById('cancelAddBtn').addEventListener('click', closeAddLinkModal);
+            document.getElementById('saveLinkBtn').addEventListener('click', addLink);
+            
+            // Search
+            setupSearch();
+            
+            // Close modals on backdrop click
+            [elements.waPopup, elements.addLinkModal, elements.waSettingsModal].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
+            
+            // Form submission
+            document.getElementById('linkTitle').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('linkUrl').focus();
+                }
+            });
+            
+            document.getElementById('linkUrl').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addLink();
+                }
+            });
+            
+            elements.waInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    saveWANumber();
+                }
+            });
+        }
+
+        // Add CSS styles for filter tags
+        const style = document.createElement('style');
+        style.textContent = `
+            .filter-tag {
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem 1rem;
+                background-color: #f3f4f6;
+                border-radius: 0.75rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                transition: all 0.2s;
+                border: 2px solid transparent;
+            }
+            
+            .dark .filter-tag {
+                background-color: #374151;
+                color: #d1d5db;
+            }
+            
+            .filter-tag:hover {
+                background-color: #e5e7eb;
+            }
+            
+            .dark .filter-tag:hover {
+                background-color: #4b5563;
+            }
+            
+            .filter-tag.active {
+                background-color: #3b82f6;
+                color: white;
+                border-color: #2563eb;
+            }
+            
+            .dark .filter-tag.active {
+                background-color: #3b82f6;
+                color: white;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+        
+        // Expose functions to global scope for onclick handlers
+        window.openLink = openLink;
+        window.sendToWA = sendToWA;
+        window.copyLink = copyLink;
+        window.deleteLink = deleteLink;
+    </script>
+</body>
+</html>
