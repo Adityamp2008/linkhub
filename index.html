@@ -12,8 +12,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="LinkHub">
     
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E">
+    
     <!-- Manifest -->
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22LinkHub%22%2C%22short_name%22%3A%22LinkHub%22%2C%22description%22%3A%22Kelola%20link%20favorit%20Anda%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%233b82f6%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%2520width%3D%27192%27%2520height%3D%27192%27%2520viewBox%3D%270%25200%252024%252024%27%2520fill%3D%27%25233b82f6%27%253E%253Cpath%2520d%3D%27M10%25204h4a2%25202%25200%25200%25201%25202%25202v12a2%25202%25200%25200%25201-2%25202H8a2%25202%25200%25200%25201-2-2V6a2%25202%25200%25200%25201%25202-2h2zm0%25202H8v12h8V6h-4V4z%27%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+    <link rel="manifest" id="manifest-placeholder">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -81,15 +85,40 @@
             box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
         }
 
-        .glass-effect {
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+        .standalone-mode {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        .standalone-mode header {
+            padding-top: calc(env(safe-area-inset-top) + 1rem);
         }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen smooth-transition">
     
-    <!-- Offline Indicator -->
+    <!-- PWA Install Banner -->
+    <div id="installBanner" class="fixed top-16 left-4 right-4 bg-blue-600 text-white p-4 rounded-xl shadow-lg z-50 hidden">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-mobile-alt text-white"></i>
+                </div>
+                <div>
+                    <p class="font-semibold">Install LinkHub</p>
+                    <p class="text-sm opacity-90">Install sebagai aplikasi untuk pengalaman terbaik</p>
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <button id="installAppBtn" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium text-sm">
+                    Install
+                </button>
+                <button id="dismissInstallBtn" class="text-white/80 p-2">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="offlineIndicator" class="fixed top-0 left-0 right-0 bg-orange-500 text-white p-2 text-center z-50 hidden">
         <i class="fas fa-wifi-slash mr-2"></i>
         Mode Offline - Data tersimpan lokal
@@ -836,77 +865,304 @@
             updateOnlineStatus();
         }
 
-        // PWA Service Worker
+        // PWA Service Worker dan Manifest
         function setupPWA() {
+            // Buat manifest dinamis
+            const manifest = {
+                name: "LinkHub - Kelola Link Favorit",
+                short_name: "LinkHub",
+                description: "Aplikasi untuk mengelola dan menyimpan link favorit Anda dengan fitur offline",
+                start_url: "./",
+                display: "standalone",
+                orientation: "portrait-primary",
+                background_color: "#ffffff",
+                theme_color: "#3b82f6",
+                categories: ["productivity", "utilities"],
+                lang: "id",
+                scope: "./",
+                icons: [
+                    {
+                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
+                        sizes: "72x72",
+                        type: "image/svg+xml",
+                        purpose: "any"
+                    },
+                    {
+                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
+                        sizes: "96x96",
+                        type: "image/svg+xml",
+                        purpose: "any"
+                    },
+                    {
+                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
+                        sizes: "128x128",
+                        type: "image/svg+xml",
+                        purpose: "any"
+                    },
+                    {
+                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='144' height='144' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
+                        sizes: "144x144",
+                        type: "image/svg+xml",
+                        purpose: "any"
+                    },
+                    {
+                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='152' height='152' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
+                        sizes: "152x152",
+                        type: "image/svg+xml",
+                        purpose: "any"
+                    },
+                    {
+                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
+                        sizes: "192x192",
+                        type: "image/svg+xml",
+                        purpose: "any"
+                    },
+                    {
+                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='384' height='384' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
+                        sizes: "384x384",
+                        type: "image/svg+xml",
+                        purpose: "any"
+                    },
+                    {
+                        src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 24 24' fill='%233b82f6'%3E%3Cpath d='M10 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2zm0 2H8v12h8V6h-4V4z'/%3E%3C/svg%3E",
+                        sizes: "512x512",
+                        type: "image/svg+xml",
+                        purpose: "any"
+                    }
+                ]
+            };
+
+            // Set manifest
+            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+            const manifestUrl = URL.createObjectURL(manifestBlob);
+            document.getElementById('manifest-placeholder').href = manifestUrl;
+
+            // Service Worker yang lebih lengkap
             if ('serviceWorker' in navigator) {
                 const swCode = `
-                const CACHE_NAME = 'linkhub-v3';
-                const urlsToCache = [
-                    '/',
+                const CACHE_NAME = 'linkhub-v1.0.0';
+                const STATIC_CACHE = 'linkhub-static-v1.0.0';
+                const DYNAMIC_CACHE = 'linkhub-dynamic-v1.0.0';
+
+                const STATIC_ASSETS = [
+                    './',
+                    './index.html',
                     'https://cdn.tailwindcss.com',
-                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2'
                 ];
 
+                // Install event
                 self.addEventListener('install', event => {
+                    console.log('SW: Installing...');
                     event.waitUntil(
-                        caches.open(CACHE_NAME)
-                            .then(cache => cache.addAll(urlsToCache))
-                            .catch(err => console.log('Cache failed:', err))
-                    );
-                    self.skipWaiting();
-                });
-
-                self.addEventListener('activate', event => {
-                    event.waitUntil(
-                        caches.keys().then(cacheNames => {
-                            return Promise.all(
-                                cacheNames.map(cacheName => {
-                                    if (cacheName !== CACHE_NAME) {
-                                        return caches.delete(cacheName);
-                                    }
-                                })
-                            );
-                        })
-                    );
-                    self.clients.claim();
-                });
-
-                self.addEventListener('fetch', event => {
-                    if (event.request.method !== 'GET') return;
-                    
-                    event.respondWith(
-                        caches.match(event.request)
-                            .then(response => {
-                                if (response) {
-                                    return response;
-                                }
-                                return fetch(event.request).catch(() => {
-                                    if (event.request.destination === 'document') {
-                                        return caches.match('/');
-                                    }
-                                });
+                        caches.open(STATIC_CACHE)
+                            .then(cache => {
+                                console.log('SW: Caching static assets');
+                                return cache.addAll(STATIC_ASSETS);
+                            })
+                            .then(() => {
+                                console.log('SW: Static assets cached');
+                                return self.skipWaiting();
+                            })
+                            .catch(error => {
+                                console.error('SW: Error caching static assets:', error);
                             })
                     );
+                });
+
+                // Activate event
+                self.addEventListener('activate', event => {
+                    console.log('SW: Activating...');
+                    event.waitUntil(
+                        caches.keys()
+                            .then(cacheNames => {
+                                return Promise.all(
+                                    cacheNames.map(cacheName => {
+                                        if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
+                                            console.log('SW: Deleting old cache:', cacheName);
+                                            return caches.delete(cacheName);
+                                        }
+                                    })
+                                );
+                            })
+                            .then(() => {
+                                console.log('SW: Activated');
+                                return self.clients.claim();
+                            })
+                    );
+                });
+
+                // Fetch event - Network First for API, Cache First for assets
+                self.addEventListener('fetch', event => {
+                    const { request } = event;
+                    const url = new URL(request.url);
+
+                    // Skip non-GET requests
+                    if (request.method !== 'GET') return;
+
+                    // Skip chrome-extension requests
+                    if (url.protocol === 'chrome-extension:') return;
+
+                    // Handle different types of requests
+                    if (STATIC_ASSETS.some(asset => request.url.includes(asset.replace('./', '')))) {
+                        // Cache first for static assets
+                        event.respondWith(cacheFirst(request));
+                    } else if (request.destination === 'document') {
+                        // Network first for HTML documents
+                        event.respondWith(networkFirst(request));
+                    } else {
+                        // Stale while revalidate for other resources
+                        event.respondWith(staleWhileRevalidate(request));
+                    }
+                });
+
+                // Cache strategies
+                async function cacheFirst(request) {
+                    try {
+                        const cachedResponse = await caches.match(request);
+                        if (cachedResponse) {
+                            return cachedResponse;
+                        }
+
+                        const networkResponse = await fetch(request);
+                        if (networkResponse.ok) {
+                            const cache = await caches.open(STATIC_CACHE);
+                            cache.put(request, networkResponse.clone());
+                        }
+                        return networkResponse;
+                    } catch (error) {
+                        console.error('Cache first failed:', error);
+                        return caches.match('./');
+                    }
+                }
+
+                async function networkFirst(request) {
+                    try {
+                        const networkResponse = await fetch(request);
+                        if (networkResponse.ok) {
+                            const cache = await caches.open(DYNAMIC_CACHE);
+                            cache.put(request, networkResponse.clone());
+                        }
+                        return networkResponse;
+                    } catch (error) {
+                        console.log('Network first falling back to cache');
+                        const cachedResponse = await caches.match(request);
+                        return cachedResponse || caches.match('./');
+                    }
+                }
+
+                async function staleWhileRevalidate(request) {
+                    const cache = await caches.open(DYNAMIC_CACHE);
+                    const cachedResponse = await cache.match(request);
+                    
+                    const fetchPromise = fetch(request).then(networkResponse => {
+                        if (networkResponse.ok) {
+                            cache.put(request, networkResponse.clone());
+                        }
+                        return networkResponse;
+                    }).catch(() => cachedResponse);
+
+                    return cachedResponse || fetchPromise;
+                }
+
+                // Handle background sync
+                self.addEventListener('sync', event => {
+                    console.log('SW: Background sync:', event.tag);
+                });
+
+                // Handle push notifications (future feature)
+                self.addEventListener('push', event => {
+                    console.log('SW: Push notification received');
+                });
+
+                // Message handling
+                self.addEventListener('message', event => {
+                    if (event.data && event.data.type === 'SKIP_WAITING') {
+                        self.skipWaiting();
+                    }
                 });
                 `;
 
                 const blob = new Blob([swCode], { type: 'text/javascript' });
                 const swUrl = URL.createObjectURL(blob);
                 
-                navigator.serviceWorker.register(swUrl)
-                    .then(() => console.log('SW registered'))
-                    .catch(err => console.log('SW registration failed:', err));
+                navigator.serviceWorker.register(swUrl, { scope: './' })
+                    .then(registration => {
+                        console.log('SW registered successfully:', registration);
+                        
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showToast('Update tersedia! Refresh halaman untuk update.', 'info');
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('SW registration failed:', error);
+                    });
             }
 
-            // Install prompt
+            // Install prompt handling
+            let deferredPrompt = null;
+            
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show install banner after delay
                 setTimeout(() => {
-                    if (confirm('Install LinkHub sebagai aplikasi di perangkat Anda?')) {
-                        e.prompt();
-                    }
-                }, 3000);
+                    showInstallBanner();
+                }, 5000);
             });
+
+            // Install banner functionality
+            function showInstallBanner() {
+                const banner = document.getElementById('installBanner');
+                const installBtn = document.getElementById('installAppBtn');
+                const dismissBtn = document.getElementById('dismissInstallBtn');
+                
+                if (!localStorage.getItem('linkhub_install_dismissed') && deferredPrompt) {
+                    banner.classList.remove('hidden');
+                    
+                    installBtn.addEventListener('click', async () => {
+                        if (deferredPrompt) {
+                            deferredPrompt.prompt();
+                            const { outcome } = await deferredPrompt.userChoice;
+                            
+                            if (outcome === 'accepted') {
+                                showToast('Terima kasih! LinkHub sedang diinstall...', 'success');
+                            }
+                            
+                            deferredPrompt = null;
+                            banner.classList.add('hidden');
+                        }
+                    });
+                    
+                    dismissBtn.addEventListener('click', () => {
+                        banner.classList.add('hidden');
+                        localStorage.setItem('linkhub_install_dismissed', 'true');
+                    });
+                }
+            }
+
+            // Check if app is installed
+            window.addEventListener('appinstalled', (e) => {
+                console.log('LinkHub installed successfully');
+                showToast('LinkHub berhasil diinstall! 🎉', 'success');
+                localStorage.setItem('linkhub_install_dismissed', 'true');
+                document.getElementById('installBanner').classList.add('hidden');
+            });
+
+            // Handle standalone mode
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                console.log('Running in standalone mode');
+                document.body.classList.add('standalone-mode');
+            }
         }
 
         // Event listeners
